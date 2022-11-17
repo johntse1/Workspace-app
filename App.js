@@ -8,6 +8,9 @@ import Home from './pages/Home'
 import Jobs from './pages/Jobs'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
+import UHome from './pages/UserHome'
+import UJobs from './pages/UserJobs'
+import UProfile from './pages/UserProfile'
 
 
 
@@ -15,39 +18,21 @@ import Login from './pages/Login'
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Jobs" component={Jobs} />
-    </Tab.Navigator>
-  );
-}
 
 const HomeStack = createNativeStackNavigator();
 
-function HomeStackScreen() {
-  return (
-    <Tab.Group>
-          <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="Profile" component={Profile} />
-          <Tab.Screen name="Jobs" component={Jobs} />
-      </Tab.Group>
-  );
-}
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let contractor = 1;
-  let user = 0;
+  let contractor = 0;
+  let user = 1;
   let member = 0;
-
+  alert('hello')
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Tab.Navigator>
       {contractor ? (
-        <Tab.Group>
+        <Tab.Group independent={true}>
           <Tab.Screen name="Home" component={Home} />
           <Tab.Screen name="Profile" component={Profile} />
           <Tab.Screen name="Jobs" component={Jobs} />
@@ -57,7 +42,7 @@ export default function App() {
           </Tab.Group>
         )}
         {member ? (
-        <Tab.Group>
+        <Tab.Group independent={true}>
           <Tab.Screen name="Login" component={Login} />
           <Tab.Screen name="SignUp" component={Login} />
         </Tab.Group>
@@ -66,10 +51,10 @@ export default function App() {
         </Tab.Group>
         )}
         {user ?  (
-        <Tab.Group>
-          <Tab.Screen name="UserHome" component={Home} />
-          <Tab.Screen name="UserProfile" component={Profile} />
-          <Tab.Screen name="UserJobs" component={Jobs} />
+        <Tab.Group independent={true}>
+          <Tab.Screen name="UserHome" component={UHome} />
+          <Tab.Screen name="UserProfile" component={UProfile} />
+          <Tab.Screen name="UserJobs" component={UJobs} />
         </Tab.Group>
         ) : (
         <Tab.Group>
