@@ -72,7 +72,9 @@ function Profile() {
 
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <Text h1>{my_profile["skills"]}</Text>
+        <Text h1>
+        {my_profile["skills"].map((skill) => <Text key={skill}>{skill}{"\n"}</Text>)}
+        </Text>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
       <Text h1>{my_profile["description"]}</Text>

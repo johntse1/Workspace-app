@@ -22,6 +22,7 @@ function Home() {
       const response = await axios.get('https://workspace.onrender.com/api/jobs/mytags', { headers: { "Authorization": `Bearer ${token}` } });
       info = response.data
       setItems(info)
+      console.log(info)
     };
     loadJob();
   }, []);
