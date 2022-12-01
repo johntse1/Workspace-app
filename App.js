@@ -1,8 +1,8 @@
-import * as React from 'react';
 import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useState } from "react"
 
 import Home from './pages/Home'
 import Jobs from './pages/Jobs'
@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import UHome from './pages/UserHome'
 import UJobs from './pages/UserJobs'
 import UProfile from './pages/UserProfile'
+import SignUp from './pages/SignUp'
 
 
 
@@ -24,10 +25,19 @@ const HomeStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  let contractor = 0;
-  let user = 1;
+    const [userToken, setUserToken] = React.useState(null);
+
+  
+
+
+
+
+
+
+
+  let contractor = 1;
+  let user = 0;
   let member = 0;
-  alert('hello')
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator>
@@ -44,7 +54,7 @@ export default function App() {
         {member ? (
         <Tab.Group independent={true}>
           <Tab.Screen name="Login" component={Login} />
-          <Tab.Screen name="SignUp" component={Login} />
+          <Tab.Screen name="SignUp" component={SignUp} />
         </Tab.Group>
         ) : (
         <Tab.Group>
@@ -52,9 +62,9 @@ export default function App() {
         )}
         {user ?  (
         <Tab.Group independent={true}>
-          <Tab.Screen name="UserHome" component={UHome} />
-          <Tab.Screen name="UserProfile" component={UProfile} />
-          <Tab.Screen name="UserJobs" component={UJobs} />
+          <Tab.Screen name="UserHome" component={UHome} options={{headerShown: false}}/>
+          <Tab.Screen name="UserProfile" component={UProfile}/>
+          <Tab.Screen name="UserJobs" component={UJobs}/>
         </Tab.Group>
         ) : (
         <Tab.Group>
