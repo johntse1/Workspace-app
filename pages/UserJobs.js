@@ -31,7 +31,7 @@ function UserJobs() {
 
   const renderIncomplete = (items) => {
     return(
-      <Text>
+      <Text key = {items._id}>
         <Text>{items.user}</Text>{"\n"}
       <Text>{items.title}  ${items.price}</Text>{"\n"}
       <Text>{items.text}</Text>{"\n"}
@@ -42,7 +42,7 @@ function UserJobs() {
 
   const renderInprogress = (items) => {
     return(
-      <Text>
+      <Text key = {items._id}>
       <Text>{items.user}</Text>{"\n"}
     <Text>{items.title}  ${items.price}</Text>{"\n"}
     <Text>{items.text}</Text>{"\n"}
@@ -53,7 +53,7 @@ function UserJobs() {
 
   const renderComplete = (items) => {
     return(
-      <Text>
+      <Text key = {items._id}>
       <Text>{items.user}</Text>{"\n"}
     <Text>{items.title}  ${items.price}</Text>{"\n"}
     <Text>{items.text}</Text>{"\n"}

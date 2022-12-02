@@ -26,7 +26,6 @@ function Profile() {
   const [got_profile,setgot_profile] = useState(null)
   const [reviews, setReviews] = useState()
   const url = 'https://workspace.onrender.com/api/reviews/get'
-
   useEffect(() => {
     const fetchData = async () => {
       let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
@@ -73,7 +72,7 @@ function Profile() {
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
         <Text h1>
-        {my_profile["skills"].map((skill) => <Text key={skill}>{skill}{"\n"}</Text>)}
+        {my_profile["skills"]}
         </Text>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>

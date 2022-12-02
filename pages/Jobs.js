@@ -11,6 +11,14 @@ import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyJobs from '../components/feed/MyJobs.js'
 
+
+const tests = async (items) =>{
+  console.log('hello')
+}
+
+
+
+
 //const Tab = createMaterialTopTabNavigator();
 function Jobs() {
   const [my_profile, setmy_profile] = useState([
@@ -30,7 +38,7 @@ function Jobs() {
 
   const renderIncomplete = (items) => {
     return(
-      <Text>
+      <Text key = {items._id}>
         <Text>{items.user}</Text>{"\n"}
       <Text>{items.title}  ${items.price}</Text>{"\n"}
       <Text>{items.text}</Text>{"\n"}
@@ -39,20 +47,9 @@ function Jobs() {
     )
   }
 
-  const renderInprogress = (items) => {
-    return(
-      <Text>
-      <Text>{items.user}</Text>{"\n"}
-    <Text>{items.title}  ${items.price}</Text>{"\n"}
-    <Text>{items.text}</Text>{"\n"}
-    <Text>{items.status}</Text>{"\n"}
-  </Text>
-    )
-  }
-
   const renderComplete = (items) => {
     return(
-      <Text>
+      <Text key = {items._id}>
       <Text>{items.user}</Text>{"\n"}
     <Text>{items.title}  ${items.price}</Text>{"\n"}
     <Text>{items.text}</Text>{"\n"}
@@ -60,8 +57,19 @@ function Jobs() {
   </Text>
     )
   }
+/*
+  const completeJob = async () =>{
+    let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
+    console.log(props._id)
 
+    
+    .then( function (response){
+      console.log(response.data)
+    }).catch(function (error){
+      console.log(error.response.status)
 
+    });
+  }*/
   useEffect(() => {
     const fetchData = async () => {
       let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
@@ -109,9 +117,9 @@ function Jobs() {
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
       <View>
-          {
-            active_jobs.map((item) => { return renderInprogress(item)})
-          }
+      {active_jobs.map((jobs) => 
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+      )}
         </View>
 
       </TabView.Item>

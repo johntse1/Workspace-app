@@ -1,16 +1,17 @@
 import axios from 'axios';
-import React from 'react'
+import React from 'react';
 import Button from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Text,View} from 'react-native';
 
 
 function MyJobs(props){
     const displayTitle = () =>{
         console.log(props)
     }
-
-    const removeJob = () =>{
+    const removeJob = async() =>{
         let url = 'https://workspace.onrender.com/api/jobs/delete/' + props.post._id
-        let token = localStorage.getItem("JWT_TOKEN")
+        let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
         axios.delete(url, { headers: { "Authorization": `Bearer ${token}` } }).then(function (response) {
             console.log(response)
             props.setRequestData(new Date());
@@ -20,20 +21,21 @@ function MyJobs(props){
         return <Redirect to='/'></Redirect>
 
     }
-    const completeJob = () =>{
-        let token = localStorage.getItem("JWT_TOKEN")
+    const completeJob = async() =>{
+      let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
+      console.log(token)
+      console.log(props.post._id)
         axios.post('https://workspace.onrender.com/api/jobs/complete/' + props.post._id,
             {
             },{ headers: { "Authorization": `Bearer ${token}` } })   
         .then( function (response){
           console.log(response.data)
-          toast.dark("Job Completed")
         }).catch(function (error){
-          console.log(error.response.status)
-          toast.error("Job failed to complete")
+          console.log(error.response)
         });
       }
-    let contBool = localStorage.getItem('contractor')
+    //let contBool = localStorage.getItem('contractor')
+    let contBool = true;
     if(contBool){
       //complete jobs for contractor
       if(props.post.status == 'Complete')
@@ -49,15 +51,15 @@ function MyJobs(props){
       //jobs that were accepted and in progress
       if(props.post.status == 'in progress')
         return(
-          <div key={props.post._id}>
-            <h1>{props.post.title}</h1>
-            <div>{props.post.user}</div>
-            <div>{props.post.text}</div>
-            <div>{props.post.price}</div>
-            <div>{props.post.status}</div>
-            <Button text='Mark as Complete' onClick={completeJob}></Button>
-            <ToastContainer/>
-          </div>)
+          <View key={props.post._id}>
+          <Text>{props.post.title}</Text>
+          <Text>{props.post.user}</Text>
+          <Text>{props.post.text}</Text>
+          <Text>${props.post.price}</Text>
+          <Text>{props.post.status}</Text>
+          <Text onPress={completeJob}>Mark as complete{"\n"}</Text>
+          </View>
+          )
       else
       {
         return(
@@ -73,3 +75,5 @@ function MyJobs(props){
       }
     }
 }
+
+export default MyJobs;
