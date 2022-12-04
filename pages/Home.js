@@ -11,44 +11,100 @@ import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
-function Home() {
+function NoPost({ navigation })
+{
   const [items, setItems] = useState([]);
   const [currItems, setCurrItems] = useState([]);
+  const [whichUi,setWhichUi] = useState([])
   const [pageNum, setNum] = useState(0);
-  let info = []
+  let ui;
   useEffect(() => {
     const loadJob = async () => {
       let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
-      const response = await axios.get('https://workspace.onrender.com/api/jobs/mytags', { headers: { "Authorization": `Bearer ${token}` } });
-      info = response.data
-      setItems(info)
-      console.log(info)
-    };
+      ui = JSON.parse(await AsyncStorage.getItem('contractor'))
+      console.log('ui is' + ui )
+      if(ui == true )
+        {
+          const response = await axios.get('https://workspace.onrender.com/api/jobs/mytags', { headers: { "Authorization": `Bearer ${token}` } });
+          setCurrItems(response.data)
+          setWhichUi('1')
+        }
+      else
+        {
+          const response = await axios.get('https://workspace.onrender.com/api/users/gettag', { headers: { "Authorization": `Bearer ${token}` } });
+          setItems(response.data)
+          console.log(response.data)
+          setWhichUi('0')
+        }
+      };
     loadJob();
   }, []);
-  
-  const renderItems = (items) => {
+
+  const renderItems = (currItems) => {
     return(
       <Text>
-      <Text>{items.user}</Text>{"\n"}
-      <Text>{items.title + '  $' + items.price}</Text>{"\n"}
-      <Text>{items.text}</Text>
+      <Text>{currItems.user}</Text>{"\n"}
+      <Text>{currItems.title + '  $' + currItems.price}</Text>{"\n"}
+      <Text>{currItems.text}</Text>
       {"\n"}
     </Text>
     )
-  }
+  };
 
+  const renderItemsU = (items) => {
+    return(
+      <Text>
+      <Text>{items.first_name + ' ' + items.last_name}</Text>{"\n"}
+      <Text>{items.description}</Text>{"\n"}
+      <Text>{items.skills}</Text>{"\n"}
+      {"\n"}
+    </Text>
+    )
+  };
 
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>LIST OF POSTS</Text>
-        <View>
-          {
-            items.map((item) => { return renderItems(item)})
-          }
+  if(whichUi == 1)
+    {
+      console.log('for contractors')
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>LIST OF POSTS</Text>
+            <View>
+              {
+               currItems.map((item) => { return renderItems(item)})
+              }
+            </View>
         </View>
-      </View>
-    );
-  }
+       )
+   }
+  else
+    {
+      console.log('for users')
+      return(
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            title="Make Post"
+            onPress={() => navigation.navigate('Make a Post')}
+          />
+          <Text>LIST OF CONTRACTORS</Text>
+          <View>
+            {
+              items.map((item) => {return renderItemsU(item)})
+            }
+          </View>
+        </View>
+          )
+        }
+}
 
-  export default Home;
+function Home() {
+  const Stack = createNativeStackNavigator();
+
+return(
+  <NavigationContainer independent={true}>
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={NoPost}/>
+    <Stack.Screen name="Make a Post" component={CreatePost}/>
+  </Stack.Navigator>
+</NavigationContainer>
+)}
+export default Home;
