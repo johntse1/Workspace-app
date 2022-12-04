@@ -31,7 +31,7 @@ function MyJobs(props){
         .then( function (response){
           console.log(response.data)
         }).catch(function (error){
-          console.log(error.response)
+          console.log(error.response.status)
         });
       }
     //let contBool = localStorage.getItem('contractor')

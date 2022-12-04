@@ -35,7 +35,7 @@ export default function App() {
 
 
 
-  let contractor = 1;
+  let contractor =1;
   let user = 0;
   let member = 0;
   return (
@@ -49,22 +49,30 @@ export default function App() {
         </Tab.Group>
         ) : (
           <Tab.Group>
-          </Tab.Group>
-        )}
-        {member ? (
-        <Tab.Group independent={true}>
+            <Tab.Group independent={true}>
           <Tab.Screen name="Login" component={Login} />
           <Tab.Screen name="SignUp" component={SignUp} />
         </Tab.Group>
-        ) : (
-        <Tab.Group>
-        </Tab.Group>
+          </Tab.Group>
         )}
-        {user ?  (
+        {user ? (
         <Tab.Group independent={true}>
           <Tab.Screen name="UserHome" component={UHome} options={{headerShown: false}}/>
           <Tab.Screen name="UserProfile" component={UProfile}/>
           <Tab.Screen name="UserJobs" component={UJobs}/>
+        </Tab.Group>
+        ) : (
+        <Tab.Group>
+          <Tab.Group independent={true}>
+          <Tab.Screen name="Login" component={Login} />
+          <Tab.Screen name="SignUp" component={SignUp} />
+        </Tab.Group>
+        </Tab.Group>
+        )}
+        {member ?  (
+        <Tab.Group independent={true}>
+          <Tab.Screen name="Login" component={Login} />
+          <Tab.Screen name="SignUp" component={SignUp} />
         </Tab.Group>
         ) : (
         <Tab.Group>

@@ -128,9 +128,9 @@ function UserJobs() {
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
       <View>
-          {
-            active_jobs.map((item) => { return renderInprogress(item)})
-          }
+      {active_jobs.map((jobs) => 
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+      )}
         </View>
 
 

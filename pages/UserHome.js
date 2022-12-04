@@ -42,6 +42,10 @@ function NoPost({ navigation })
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Button
+          title="Make Post"
+          onPress={() => navigation.navigate('Make a Post')}
+        />
         <Text>LIST OF CONTRACTORS</Text>
         <View>
           {
