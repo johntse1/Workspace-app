@@ -10,6 +10,7 @@ import { API_BASE_URL, API_GET_ME } from '../API_ENDPOINTS'
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyJobs from '../components/feed/MyJobs.js'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const tests = async (items) =>{
@@ -36,16 +37,6 @@ function Jobs() {
   const [previous_jobs, setPrevious_Jobs] = useState([])
   const [incomplete_jobs, setIncomplete_Jobs] = useState([])
 
-  const renderIncomplete = (items) => {
-    return(
-      <Text key = {items._id}>
-        <Text>{items.user}</Text>{"\n"}
-      <Text>{items.title}  ${items.price}</Text>{"\n"}
-      <Text>{items.text}</Text>{"\n"}
-      <Text>{items.status}</Text>{"\n"}
-    </Text>
-    )
-  }
 
   const renderComplete = (items) => {
     return(
@@ -116,19 +107,23 @@ function Jobs() {
 
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+      <ScrollView>
       <View>
       {active_jobs.map((jobs) => 
         <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
       )}
         </View>
+      </ScrollView>
 
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+      <ScrollView>
       <View>
           {
             previous_jobs.map((item) => { return renderComplete(item)})
           }
         </View>
+        </ScrollView>
       </TabView.Item>
     </TabView>
   </>

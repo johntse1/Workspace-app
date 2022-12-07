@@ -22,7 +22,7 @@ function Profile() {
       "id": "placeholderid"
     }
   ]);
-  
+  const [whichUi,setWhichUi] = useState([]);
   const [got_profile,setgot_profile] = useState(null)
   const [reviews, setReviews] = useState()
   const url = 'https://workspace.onrender.com/api/reviews/get'
@@ -31,22 +31,31 @@ function Profile() {
       let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
       const response = await axios.get(API_BASE_URL + API_GET_ME, { headers: { "Authorization": `Bearer ${token}` } });
       const reviewResponse = await axios.get(url, { headers: { "Authorization": `Bearer ${token}` } });
+      if(JSON.parse(await AsyncStorage.getItem('contractor')))
+      {
+        setWhichUi('1')
+      }
+      else
+      {
+        setWhichUi('0')
+      }
       setmy_profile(response.data)
       setReviews(reviewResponse.data)
       console.log(response.data)
       //console.log(reviewResponse.data)
       setgot_profile(true)
-      console.log('good')
-      console.log(my_profile["description"])
     };
     fetchData();
   }, []);
+
+  if(whichUi == 1)
+  {
     return (
       <>
       <Text>{my_profile["first_name"]}</Text>
       <Text>{my_profile["email"]}</Text>
       <Text>{my_profile["id"]}</Text>
-    <Tab
+      <Tab
       value={index}
       onChange={(e) => setIndex(e)}
       indicatorStyle={{
@@ -54,7 +63,7 @@ function Profile() {
         height: 3,
       }}
       variant="primary"
-    >
+      >
       <Tab.Item
         title="Skills"
         titleStyle={{ fontSize: 12 }}
@@ -85,6 +94,44 @@ function Profile() {
   </>
     );
   }
+  else
+  {
+    return (
+      <>
+      <Text>{my_profile["first_name"]}</Text>
+      <Text>{my_profile["email"]}</Text>
+      <Text>{my_profile["id"]}</Text>
+    <Tab
+      value={index}
+      onChange={(e) => setIndex(e)}
+      indicatorStyle={{
+        backgroundColor: 'white',
+        height: 3,
+      }}
+      variant="primary"
+    >
+      <Tab.Item
+        title="About"
+        titleStyle={{ fontSize: 12 }}
+      />
+      <Tab.Item
+        title="Reviews"
+        titleStyle={{ fontSize: 12 }}
+      />
+    </Tab>
+
+    <TabView value={index} onChange={setIndex} animationType="spring">
+      <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+        <Text h1>{my_profile["description"]}</Text>
+      </TabView.Item>
+      <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+      
+      </TabView.Item>
+    </TabView>
+  </>
+    );
+  }
+}
 
   export default Profile;
 

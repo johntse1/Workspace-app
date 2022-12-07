@@ -1,4 +1,4 @@
-import { AppRegistry, View} from 'react-native';
+import { AppRegistry, View, ScrollView} from 'react-native';
 import { Button } from '@rneui/themed';
 import CreatePost from './CreatePost'
 import { Tab, Text, TabView } from '@rneui/themed';
@@ -10,6 +10,7 @@ import UserFeed from '../components/feed/UserFeed.js'
 import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
+import Posts from '../components/feed/Post.js'
 
 function NoPost({ navigation })
 {
@@ -17,6 +18,8 @@ function NoPost({ navigation })
   const [currItems, setCurrItems] = useState([]);
   const [whichUi,setWhichUi] = useState([])
   const [pageNum, setNum] = useState(0);
+  const [requestData, setRequestData] = useState(new Date());
+  
   let ui;
   useEffect(() => {
     const loadJob = async () => {
@@ -66,20 +69,23 @@ function NoPost({ navigation })
     {
       console.log('for contractors')
       return (
+        <ScrollView>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>LIST OF POSTS</Text>
             <View>
-              {
-               currItems.map((item) => { return renderItems(item)})
-              }
+              {currItems.map((item) => 
+              <Posts post={item} key={item._id} setRequestData={setRequestData}></Posts>
+              )}
             </View>
         </View>
+        </ScrollView>
        )
    }
   else
     {
       console.log('for users')
       return(
+        <ScrollView>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Button
             title="Make Post"
@@ -92,6 +98,7 @@ function NoPost({ navigation })
             }
           </View>
         </View>
+        </ScrollView>
           )
         }
 }
