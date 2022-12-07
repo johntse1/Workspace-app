@@ -35,19 +35,17 @@ function MyJobs(props){
         });
       }
     //let contBool = localStorage.getItem('contractor')
-    let contBool = true;
-    if(contBool){
+
       //complete jobs for contractor
       if(props.post.status == 'Complete')
         return(
-          <div key={props.post._id}>
-            <h1>{props.post.title}</h1>
-            <Link to={{pathname: '/otherUser', state: props.post.user}} className='stuff'>{props.post.username}</Link>
-            <div>{props.post.text}</div>
-            <div>{props.post.price}</div>
-            <div>{props.post.status}</div>
-            <Link to={{pathname: '/review', state: props.post._id}}><Button text='Review' onClick={displayTitle}></Button></Link>
-          </div>)
+          <View key={props.post._id}>
+            <Text>{props.post.title}</Text>
+            <Text>{props.post.username}</Text>
+            <Text>{props.post.text}</Text>
+            <Text>{props.post.price}</Text>
+            <Text>{props.post.status}{"\n"}</Text>
+          </View>)
       //jobs that were accepted and in progress
       if(props.post.status == 'in progress')
         return(
@@ -63,17 +61,17 @@ function MyJobs(props){
       else
       {
         return(
-        <div key={props.post._id}>
-            <h1>{props.post.title}</h1>
-            <div>{props.post.user}</div>
-            <div>{props.post.text}</div>
-            <div>{props.post.price}</div>
-            <div>{props.post.status}</div>
-            <Button text='Remove Job' onClick={removeJob}></Button>
-        </div>
+        <View key={props.post._id}>
+            <Text>{props.post.title}</Text>
+            <Text>{props.post.user}</Text>
+            <Text>{props.post.text}</Text>
+            <Text>{props.post.price}</Text>
+            <Text>{props.post.status}</Text>
+            <Text onPress={removeJob}>Remove Job{"\n"}</Text>
+        </View>
         )
       }
     }
-}
+
 
 export default MyJobs;

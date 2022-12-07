@@ -5663,6 +5663,11 @@
     "react-freeze" "^1.0.0"
     "warn-once" "^0.1.0"
 
+"react-native-select-dropdown@^3.1.0":
+  "integrity" "sha512-M3urU+Q3H5KbJfkvB6adatTm0s5vsIly+cq6StGzr6AoQMoXa//4KZ+kgKtQ06r3t1O0A6Vx51xDSZw813xilw=="
+  "resolved" "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-3.1.0.tgz"
+  "version" "3.1.0"
+
 "react-native-sidebar@^0.3.0":
   "integrity" "sha512-2wbUFywUmj7h+MiG4X0VoEHicKLpzchmPmKDv6zYcHZT4OKEecnE8DiVyQA5GdiqQjDUDah2TWHmxxyG866B3Q=="
   "resolved" "https://registry.npmjs.org/react-native-sidebar/-/react-native-sidebar-0.3.0.tgz"

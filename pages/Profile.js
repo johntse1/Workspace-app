@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,6 +13,13 @@ import ReviewFeed from '../components/reviewstuff/ReviewFeed'
 
 //const Tab = createMaterialTopTabNavigator();
 function Profile() {
+  const logout =() => {
+    AsyncStorage.removeItem("JWT_TOKEN")
+    console.log('Logged out')
+}
+
+
+
   const [index, setIndex] = React.useState(0);
   const [my_profile, setmy_profile] = useState([
     {
@@ -47,11 +54,14 @@ function Profile() {
     };
     fetchData();
   }, []);
-
+let link = my_profile['image']
   if(whichUi == 1)
   {
     return (
       <>
+      <Button onPress={logout}>Logout</Button>
+      <Image source={{uri: link}}
+       style={{width: 200, height: 200}} />       
       <Text>{my_profile["first_name"]}</Text>
       <Text>{my_profile["email"]}</Text>
       <Text>{my_profile["id"]}</Text>
@@ -98,6 +108,9 @@ function Profile() {
   {
     return (
       <>
+      <Button onPress={logout}>Logout</Button>
+      <Image source={{uri: link}}
+       style={{width: 200, height: 200}} />      
       <Text>{my_profile["first_name"]}</Text>
       <Text>{my_profile["email"]}</Text>
       <Text>{my_profile["id"]}</Text>

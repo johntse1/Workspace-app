@@ -36,6 +36,7 @@ function Jobs() {
   const [requestData, setRequestData] = useState(new Date());
   const [previous_jobs, setPrevious_Jobs] = useState([])
   const [incomplete_jobs, setIncomplete_Jobs] = useState([])
+  const [isCont, setIsCont] = useState([])
 
 
   const renderComplete = (items) => {
@@ -63,6 +64,14 @@ function Jobs() {
   }*/
   useEffect(() => {
     const fetchData = async () => {
+      if(JSON.parse(await AsyncStorage.getItem('contractor')))
+      {
+        setIsCont('1')
+      }
+      else
+      {
+        setIsCont('0')
+      }
       let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
       const response = await axios.get(API_BASE_URL + API_GET_ME, { headers: { "Authorization": `Bearer ${token}` } });
       const jobsList = await axios.get('https://workspace.onrender.com/api/jobs/getcurrent', { headers: { "Authorization": `Bearer ${token}` } })
@@ -83,7 +92,7 @@ function Jobs() {
 
 
 
-
+  if(isCont == 1)
     return (
       <>
     <Tab
@@ -119,15 +128,80 @@ function Jobs() {
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
       <ScrollView>
       <View>
-          {
-            previous_jobs.map((item) => { return renderComplete(item)})
-          }
+      {previous_jobs.map((jobs) => 
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+      )}
         </View>
         </ScrollView>
       </TabView.Item>
     </TabView>
   </>
     );
+    else
+    {
+      return (
+        <>
+      <Tab
+        value={index}
+        onChange={(e) => setIndex(e)}
+        indicatorStyle={{
+          backgroundColor: 'white',
+          height: 3,
+        }}
+        variant="primary"
+      >
+        <Tab.Item
+          title="Listed Jobs"
+          titleStyle={{ fontSize: 12 }}
+        />
+        <Tab.Item
+          title="Ongoing Jobs"
+          titleStyle={{ fontSize: 12 }}
+        />
+         <Tab.Item
+          title="Past Jobs"
+          titleStyle={{ fontSize: 12 }}
+        />
+      </Tab>
+      
+  
+      <TabView value={index} onChange={setIndex} animationType="spring">
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+        <ScrollView>
+        <View>
+        {incomplete_jobs.map((jobs) => 
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+      )}
+          </View>
+        </ScrollView>
+  
+        </TabView.Item>
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+        <ScrollView>
+        <View>
+        {active_jobs.map((jobs) => 
+          <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+        )}
+          </View>
+          </ScrollView>
+  
+  
+        </TabView.Item>
+  
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+        <ScrollView>
+        <View>
+        {previous_jobs.map((jobs) => 
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+      )}
+          </View>
+          </ScrollView>
+  
+        </TabView.Item>
+      </TabView>
+    </>
+      );
+    }
   }
 
   export default Jobs;
