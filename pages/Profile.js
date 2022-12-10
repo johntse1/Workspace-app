@@ -15,6 +15,7 @@ import ReviewPost from '../components/reviewstuff/ReviewPost.js'
 function Profile() {
   const logout =() => {
     AsyncStorage.removeItem("JWT_TOKEN")
+    AsyncStorage.removeItem("contractor")
     console.log('Logged out')
     onRefresh();
     
