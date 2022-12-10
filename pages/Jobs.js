@@ -39,29 +39,41 @@ function Jobs() {
   const [isCont, setIsCont] = useState([])
 
 
-  const renderComplete = (items) => {
-    return(
-      <Text key = {items._id}>
-      <Text>{items.user}</Text>{"\n"}
-    <Text>{items.title}  ${items.price}</Text>{"\n"}
-    <Text>{items.text}</Text>{"\n"}
-    <Text>{items.status}</Text>{"\n"}
-  </Text>
-    )
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
   }
-/*
-  const completeJob = async () =>{
-    let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
-    console.log(props._id)
+    const [refreshing, setRefreshing] = React.useState(false);
+  
+    const onRefresh = React.useCallback(() => {
+      const fetchData = async () => {
+        if(JSON.parse(await AsyncStorage.getItem('contractor')))
+        {
+          setIsCont('1')
+        }
+        else
+        {
+          setIsCont('0')
+        }
+        let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
+        const response = await axios.get(API_BASE_URL + API_GET_ME, { headers: { "Authorization": `Bearer ${token}` } });
+        const jobsList = await axios.get('https://workspace.onrender.com/api/jobs/getcurrent', { headers: { "Authorization": `Bearer ${token}` } })
+        setmy_profile(response.data)
+        setgot_profile(true)
+        setActive_Jobs(jobsList.data)
+        const prevjobsList = await axios.get('https://workspace.onrender.com/api/jobs/getpast', { headers: { "Authorization": `Bearer ${token}` } })
+        setPrevious_Jobs(prevjobsList.data)
+        //console.log(prevjobsList.data)
+        const incompletejobList = await axios.get('https://workspace.onrender.com/api/jobs/getincomplete ', { headers: { "Authorization": `Bearer ${token}` } })
+        setIncomplete_Jobs(incompletejobList.data)
+        console.log(jobsList.data)
+        //console.log(previous_jobs)
+        console.log('as')
+      };
+      fetchData();
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
 
-    
-    .then( function (response){
-      console.log(response.data)
-    }).catch(function (error){
-      console.log(error.response.status)
-
-    });
-  }*/
   useEffect(() => {
     const fetchData = async () => {
       if(JSON.parse(await AsyncStorage.getItem('contractor')))
@@ -95,6 +107,7 @@ function Jobs() {
   if(isCont == 1)
     return (
       <>
+      <Button onPress={onRefresh}>Refresh</Button>
     <Tab
       value={index}
       onChange={(e) => setIndex(e)}
@@ -141,6 +154,7 @@ function Jobs() {
     {
       return (
         <>
+        <Button onPress={onRefresh}>Refresh</Button>
       <Tab
         value={index}
         onChange={(e) => setIndex(e)}

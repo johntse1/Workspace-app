@@ -2,12 +2,23 @@ import { Button, View, Text, TextInput } from 'react-native';
 import React, { useState } from 'react'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RefreshControl, SafeAreaView, StyleSheet,ScrollView } from 'react-native';
 
 function Login({ navigation }) {
     const [USER_EMAIL, setUSER_EMAIL] = useState('')
     const [USER_PASSWORD, setUSER_PASSWORD] = useState('')
 
+    const wait = (timeout) => {
+      return new Promise(resolve => setTimeout(resolve, timeout));
+    }
     
+  
+      const [refreshing, setRefreshing] = React.useState(false);
+    
+      const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(2000).then(() => setRefreshing(false));
+      }, []);
     
     let API_BASE_URL = 'https://workspace.onrender.com/api/'
     let API_SIGN_IN_URL = 'users/login'
@@ -41,7 +52,14 @@ function Login({ navigation }) {
       
 
     return (
-      <View>
+      <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }
+        >
       <View>
         <TextInput 
           placeholder="Email" 
@@ -56,7 +74,7 @@ function Login({ navigation }) {
         <Button color='black' title='Sign in' onPress={signin} />
     </View>
     
-    </View>
+    </ScrollView>
     );
   }
 

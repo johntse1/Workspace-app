@@ -1,4 +1,4 @@
-import { View, Image } from 'react-native';
+import { View, Image,RefreshControl,ScrollView } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,18 +9,48 @@ import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '@rneui/themed';
 import axios from 'axios'
-import ReviewFeed from '../components/reviewstuff/ReviewFeed'
+import ReviewPost from '../components/reviewstuff/ReviewPost.js'
 
 //const Tab = createMaterialTopTabNavigator();
 function Profile() {
   const logout =() => {
     AsyncStorage.removeItem("JWT_TOKEN")
     console.log('Logged out')
+    onRefresh();
+    
 }
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const onRefresh = React.useCallback(() => {
+    const loadJob = async () => {
+      let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
+      const response = await axios.get(API_BASE_URL + API_GET_ME, { headers: { "Authorization": `Bearer ${token}` } });
+      const reviewResponse = await axios.get(url, { headers: { "Authorization": `Bearer ${token}` } });
+      if(JSON.parse(await AsyncStorage.getItem('contractor')))
+      {
+        setWhichUi('1')
+      }
+      else
+      {
+        setWhichUi('0')
+      }
+      setmy_profile(response.data)
+      setReviews(reviewResponse.data)
+      console.log(reviews)
+      //console.log(reviewResponse.data)
+      setgot_profile(true)
+    };
+    loadJob();
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const [index, setIndex] = React.useState(0);
+  
   const [my_profile, setmy_profile] = useState([
     {
       "first_name": "john",
@@ -30,8 +60,9 @@ function Profile() {
     }
   ]);
   const [whichUi,setWhichUi] = useState([]);
+  const [requestData, setRequestData] = useState(new Date());
   const [got_profile,setgot_profile] = useState(null)
-  const [reviews, setReviews] = useState()
+  const [reviews, setReviews] = useState([])
   const url = 'https://workspace.onrender.com/api/reviews/get'
   useEffect(() => {
     const fetchData = async () => {
@@ -48,21 +79,26 @@ function Profile() {
       }
       setmy_profile(response.data)
       setReviews(reviewResponse.data)
-      console.log(response.data)
+      console.log(reviews)
       //console.log(reviewResponse.data)
       setgot_profile(true)
     };
     fetchData();
   }, []);
+  console.log(my_profile["description"])
 let link = my_profile['image']
   if(whichUi == 1)
   {
     return (
-      <>
+      
+      <>      
       <Button onPress={logout}>Logout</Button>
+      <Button onPress={onRefresh}>Refresh</Button>
       <Image source={{uri: link}}
+      
        style={{width: 200, height: 200}} />       
       <Text>{my_profile["first_name"]}</Text>
+      
       <Text>{my_profile["email"]}</Text>
       <Text>{my_profile["id"]}</Text>
       <Tab
@@ -87,28 +123,40 @@ let link = my_profile['image']
         titleStyle={{ fontSize: 12 }}
       />
     </Tab>
-
+    
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+      <ScrollView>
         <Text h1>
         {my_profile["skills"]}
         </Text>
+        </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+      <ScrollView>
       <Text h1>{my_profile["description"]}</Text>
+      </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <Text h1>Good worker</Text>
-      </TabView.Item>
+      <ScrollView>
+        <View>
+        {reviews.map((item) => 
+              <ReviewPost post={item} key={item._id} setRequestData={setRequestData}></ReviewPost>
+              )}
+          </View>
+        </ScrollView>
+      </TabView.Item>  
     </TabView>
-  </>
+    </>
     );
   }
   else
   {
+    console.log(reviews)
     return (
       <>
       <Button onPress={logout}>Logout</Button>
+      <Button onPress={onRefresh}>Refresh</Button>
       <Image source={{uri: link}}
        style={{width: 200, height: 200}} />      
       <Text>{my_profile["first_name"]}</Text>
@@ -135,10 +183,20 @@ let link = my_profile['image']
 
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <Text h1>{my_profile["description"]}</Text>
+      <ScrollView>
+      <Text h1>
+      {my_profile["description"]}
+        </Text>
+        </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      
+      <ScrollView>
+          <View>
+              {reviews.map((item) => 
+              <ReviewPost post={item} key={item._id} setRequestData={setRequestData}></ReviewPost>
+              )}
+          </View>
+          </ScrollView>
       </TabView.Item>
     </TabView>
   </>

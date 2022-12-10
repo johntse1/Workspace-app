@@ -11,16 +11,53 @@ import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 import Posts from '../components/feed/Post.js'
+import Contract from '../components/feed/User.js'
+import { FlatList } from 'react-native-gesture-handler';
+import { RefreshControl, SafeAreaView, StyleSheet } from 'react-native';
+
+
+
+
 
 function NoPost({ navigation })
 {
+
   const [items, setItems] = useState([]);
   const [currItems, setCurrItems] = useState([]);
   const [whichUi,setWhichUi] = useState([])
   const [pageNum, setNum] = useState(0);
   const [requestData, setRequestData] = useState(new Date());
-  
   let ui;
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+    const [refreshing, setRefreshing] = React.useState(false);
+  
+    const onRefresh = React.useCallback(() => {
+      const loadJob = async () => {
+        let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
+        ui = JSON.parse(await AsyncStorage.getItem('contractor'))
+        console.log('ui is' + ui )
+        if(ui == true )
+          {
+            const response = await axios.get('https://workspace.onrender.com/api/jobs/mytags', { headers: { "Authorization": `Bearer ${token}` } });
+            setCurrItems(response.data)
+            setWhichUi('1')
+          }
+        else
+          {
+            const response = await axios.get('https://workspace.onrender.com/api/users/gettag', { headers: { "Authorization": `Bearer ${token}` } });
+            setItems(response.data)
+            console.log(response.data)
+            setWhichUi('0')
+          }
+        };
+      loadJob();
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+  
   useEffect(() => {
     const loadJob = async () => {
       let token = JSON.parse(await AsyncStorage.getItem('JWT_TOKEN'))
@@ -43,34 +80,23 @@ function NoPost({ navigation })
     loadJob();
   }, []);
 
-  const renderItems = (currItems) => {
-    return(
-      <Text>
-      <Text>{currItems.user}</Text>{"\n"}
-      <Text>{currItems.title + '  $' + currItems.price}</Text>{"\n"}
-      <Text>{currItems.text}</Text>
-      {"\n"}
-    </Text>
-    )
-  };
 
-  const renderItemsU = (items) => {
-    return(
-      <Text>
-      <Text>{items.first_name + ' ' + items.last_name}</Text>{"\n"}
-      <Text>{items.description}</Text>{"\n"}
-      <Text>{items.skills}</Text>{"\n"}
-      {"\n"}
-    </Text>
-    )
-  };
 
   if(whichUi == 1)
     {
       console.log('for contractors')
       return (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }
+        >
+        
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Button onPress={onRefresh}>Refresh</Button>
           <Text>LIST OF POSTS</Text>
             <View>
               {currItems.map((item) => 
@@ -85,17 +111,25 @@ function NoPost({ navigation })
     {
       console.log('for users')
       return(
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }
+        >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Button onPress={onRefresh}>Refresh</Button>
           <Button
             title="Make Post"
             onPress={() => navigation.navigate('Make a Post')}
           />
           <Text>LIST OF CONTRACTORS</Text>
           <View>
-            {
-              items.map((item) => {return renderItemsU(item)})
-            }
+          {items.map((item) => 
+              <Contract post={item} key={item._id} setRequestData={setRequestData}></Contract>
+              )}
           </View>
         </View>
         </ScrollView>

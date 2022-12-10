@@ -17,7 +17,7 @@ function Post(props){
           console.log(response.data)
           Alert("Job Accepted")
         }).catch(function (error){
-          console.log(error.response.status)
+          console.log(error.response)
         });
       }
     return(

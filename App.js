@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from "react"
+import { RefreshControl, SafeAreaView, StyleSheet,ScrollView } from 'react-native';
 
 import Home from './pages/Home'
 import Jobs from './pages/Jobs'
@@ -26,9 +27,16 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
     const [userToken, setUserToken] = React.useState(null);
-
   
+    const [refresh,setRefresh] = useState(false)
 
+    const pullDown = () =>{
+      setRefresh(true)
+  
+      setTimeout(()=>{
+        setRefresh(false)
+      },5000)
+    }
 
 
 
@@ -39,45 +47,24 @@ export default function App() {
   let user = 0;
   let member = 0;
   return (
+    
     <NavigationContainer independent={true}>
       <Tab.Navigator>
       {contractor ? (
         <Tab.Group independent={true}>
+          
+          <Tab.Screen name="Login" component={Login} />
+          <Tab.Screen name="SignUp" component={SignUp} />
           <Tab.Screen name="Home" component={Home} />
           <Tab.Screen name="Profile" component={Profile} />
           <Tab.Screen name="Jobs" component={Jobs} />
+          
         </Tab.Group>
         ) : (
           <Tab.Group>
-            <Tab.Group independent={true}>
-          <Tab.Screen name="Login" component={Login} />
-          <Tab.Screen name="SignUp" component={SignUp} />
-        </Tab.Group>
           </Tab.Group>
         )}
-        {user ? (
-        <Tab.Group independent={true}>
-          <Tab.Screen name="UserHome" component={UHome} options={{headerShown: false}}/>
-          <Tab.Screen name="UserProfile" component={UProfile}/>
-          <Tab.Screen name="UserJobs" component={UJobs}/>
-        </Tab.Group>
-        ) : (
-        <Tab.Group>
-          <Tab.Group independent={true}>
-          <Tab.Screen name="Login" component={Login} />
-          <Tab.Screen name="SignUp" component={SignUp} />
-        </Tab.Group>
-        </Tab.Group>
-        )}
-        {member ?  (
-        <Tab.Group independent={true}>
-          <Tab.Screen name="Login" component={Login} />
-          <Tab.Screen name="SignUp" component={SignUp} />
-        </Tab.Group>
-        ) : (
-        <Tab.Group>
-        </Tab.Group>
-        )}
+
       </Tab.Navigator>
     </NavigationContainer>
   );
