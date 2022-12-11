@@ -1,7 +1,10 @@
 import { Button, View, Text, TextInput,StyleSheet } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
+import React from 'react';
+import axios from 'axios'
+
 const styles = StyleSheet.create({
   input: {
     height: 40,
@@ -13,6 +16,20 @@ const styles = StyleSheet.create({
 
 let enteredSklls = []
 function CreatePost() {
+
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+  
+
+    const [refreshing, setRefreshing] = React.useState(false);
+  
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+
+
       const [got_profile, setgot_profile] = useState(null)
       const [JWT_TOKEN, setJWT_TOKEN] = useState('')
       const [POST_ID, setPOST_ID] = useState('')
@@ -58,7 +75,6 @@ function CreatePost() {
           headers: { "Content-Type": "multipart/form-data", "Authorization": `Bearer ${token}` }
         }).then(function (response) {
           console.log(response)
-          history.push('/userjobs')
     
         }).catch(function (error) {
           console.log(error)
@@ -100,6 +116,7 @@ function CreatePost() {
           style={styles.input}
           placeholder="Price"
           onChangeText={(USER_PRICE) => setUSER_PRICE(USER_PRICE)}
+          
         />
 
         <TextInput
@@ -114,7 +131,7 @@ function CreatePost() {
           onChangeText={(USER_POST_DESCRIPTION) => setUSER_POST_DESCRIPTION(USER_POST_DESCRIPTION)}
         />
         <View>
-        <Text>Hi{USER_TAGS.toString()}</Text>
+        <Text>{USER_TAGS.toString()}</Text>
         </View>
         <SelectDropdown
 	        data={skills}
@@ -123,6 +140,7 @@ function CreatePost() {
           enteredSklls.push(selectedItem)
           console.log(enteredSklls)
           setUSER_TAGS(enteredSklls)
+          onRefresh()
 	      }}
 	        buttonTextAfterSelection={(selectedItem, index) => {
 		      return selectedItem
@@ -132,7 +150,7 @@ function CreatePost() {
 	      }}
         />
         <View>
-
+        <Button color='black' title='Create Post' onPress={setJobs} />
         </View>
       </View>
     );
