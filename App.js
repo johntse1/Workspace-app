@@ -6,7 +6,7 @@ import React, { useState } from "react"
 import { RefreshControl, SafeAreaView, StyleSheet,ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react'
-
+import Icon from "react-native-vector-icons/Ionicons";
 
 import Home from './pages/Home'
 import Jobs from './pages/Jobs'
@@ -98,7 +98,30 @@ useEffect(() => {
   return (
     
     <NavigationContainer independent={true}>
-      <Tab.Navigator> 
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if(route.name === 'Login') {
+              iconName = 'walk'
+            }
+            if(route.name === 'SignUp') {
+              iconName = 'add-circle-outline';
+            }
+            if(route.name === 'Home') {
+              iconName = 'home'
+            }
+            if(route.name ==='Profile') {
+              iconName = 'person'
+            }
+            if(route.name === 'Jobs') {
+              iconName = 'briefcase'
+            }
+            return <Icon name={iconName} size={size} colo={color}></Icon>
+          }
+        })}
+      > 
       {!islogin ? (
         <Tab.Group independent={true}>
           <Tab.Screen name="Login" component={Login} />

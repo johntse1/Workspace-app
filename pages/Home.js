@@ -141,6 +141,7 @@ function Home() {
   const Stack = createNativeStackNavigator();
 
 return(
+  
   <NavigationContainer independent={true}>
   <Stack.Navigator initialRouteName="Home">
     <Stack.Screen name="Home" component={NoPost}/>
