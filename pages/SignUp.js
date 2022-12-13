@@ -186,10 +186,7 @@ function SignUp({ navigation }) {
       />
 
       <Button title="Upload a profile picture" onPress={pickImage} />
-      <Button title="print file data" onPress={printimage} />
       <Button color='black' title='Register' onPress={registerUser} />
-      <Button color='black' title='print all' onPress={temp} />
-
     </View>
   );
 }
