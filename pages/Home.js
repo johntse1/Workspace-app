@@ -149,9 +149,10 @@ function Home() {
 return(
   
   <NavigationContainer independent={true}>
-  <Stack.Navigator initialRouteName="Job Feed">
-    <Stack.Screen name="Feed" component={NoPost}/>
-    <Stack.Screen name="Make a Post" component={CreatePost} />
+    
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={NoPost}/>
+    <Stack.Screen name="Make a Post" component={CreatePost}/>
   </Stack.Navigator>
 </NavigationContainer>
 )}
