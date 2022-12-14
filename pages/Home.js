@@ -1,4 +1,4 @@
-import { AppRegistry, View, ScrollView} from 'react-native';
+import { AppRegistry, View, ScrollView, TouchableOpacity} from 'react-native';
 import { Button } from '@rneui/themed';
 import CreatePost from './CreatePost'
 import { Tab, Text, TabView } from '@rneui/themed';
@@ -96,8 +96,9 @@ function NoPost({ navigation })
         >
         
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button onPress={onRefresh}>Refresh</Button>
-          <Text>LIST OF POSTS</Text>
+        {//<Button onPress={onRefresh}>Refresh</Button>
+        }
+          <Text style={{paddingTop:30,paddingBottom:20}}>LIST OF POSTS</Text>
             <View>
               {currItems.map((item) => 
               <Posts post={item} key={item._id} setRequestData={setRequestData}></Posts>
@@ -120,12 +121,17 @@ function NoPost({ navigation })
           }
         >
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button onPress={onRefresh}>Refresh</Button>
+        {//<Button onPress={onRefresh}>Refresh</Button>
+        }
+          <Text></Text>
           <Button
-            title="Make Post"
+            title="Create Post"
             onPress={() => navigation.navigate('Make a Post')}
+            color='black'
+            size='lg'
+            style={{paddingTop:30}}
           />
-          <Text>LIST OF CONTRACTORS</Text>
+          <Text style={{paddingTop:30,paddingBottom:20}}>LIST OF CONTRACTORS</Text>
           <View>
           {items.map((item) => 
               <Contract post={item} key={item._id} setRequestData={setRequestData}></Contract>
@@ -143,9 +149,9 @@ function Home() {
 return(
   
   <NavigationContainer independent={true}>
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={NoPost}/>
-    <Stack.Screen name="Make a Post" component={CreatePost}/>
+  <Stack.Navigator initialRouteName="Job Feed">
+    <Stack.Screen name="Feed" component={NoPost}/>
+    <Stack.Screen name="Make a Post" component={CreatePost} />
   </Stack.Navigator>
 </NavigationContainer>
 )}
