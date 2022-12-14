@@ -10,10 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '@rneui/themed';
 import axios from 'axios'
 import ReviewPost from '../components/reviewstuff/ReviewPost.js'
+import Toast from 'react-native-toast-message'
 
 //const Tab = createMaterialTopTabNavigator();
 function Profile() {
   const logout =() => {
+    Toast.show({type:'info',text1:'Logging out...'})
     AsyncStorage.removeItem("JWT_TOKEN")
     AsyncStorage.removeItem("contractor")
     console.log('Logged out')
@@ -92,16 +94,21 @@ let link = my_profile['image']
   {
     return (
       
-      <>      
-      <Button onPress={logout}>Logout</Button>
-      <Button onPress={onRefresh}>Refresh</Button>
+      <
+        > 
+      
+      <View style={{}}>
+      <Button onPress={logout} color='darkred'>Logout</Button>
+      </View>
       <Image source={{uri: link}}
       
-       style={{width: 200, height: 200}} />       
-      <Text>{my_profile["first_name"]}</Text>
+       style={{width: 200, height: 200}} />   
+       <Toast />    
+      <Text style={{fontSize:25}}>{my_profile["first_name"] + " " + my_profile["last_name"]}</Text>
       
-      <Text>{my_profile["email"]}</Text>
-      <Text>{my_profile["id"]}</Text>
+      <Text style={{fontSize:25}}>{my_profile["email"]}</Text>
+      {//<Text>{my_profile["id"]}</Text>
+      }
       <Tab
       value={index}
       onChange={(e) => setIndex(e)}
@@ -127,19 +134,34 @@ let link = my_profile['image']
     
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
         <Text h1>
         {my_profile["skills"]}
         </Text>
         </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
       <Text h1>{my_profile["description"]}</Text>
       </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
         <View>
         {reviews.map((item) => 
               <ReviewPost post={item} key={item._id} setRequestData={setRequestData}></ReviewPost>
@@ -156,13 +178,14 @@ let link = my_profile['image']
     console.log(reviews)
     return (
       <>
-      <Button onPress={logout}>Logout</Button>
-      <Button onPress={onRefresh}>Refresh</Button>
+      <Button color='darkred' onPress={logout}>Logout</Button>
       <Image source={{uri: link}}
-       style={{width: 200, height: 200}} />      
-      <Text>{my_profile["first_name"]}</Text>
-      <Text>{my_profile["email"]}</Text>
-      <Text>{my_profile["id"]}</Text>
+       style={{width: 200, height: 200}} />  
+       <Toast />    
+      <Text style={{fontSize:25}}>{my_profile["first_name"] + " " + my_profile['last_name']}</Text>
+      <Text style={{fontSize:25}}>{my_profile["email"]}</Text>
+      {//<Text>{my_profile["id"]}</Text>
+  }
     <Tab
       value={index}
       onChange={(e) => setIndex(e)}
@@ -184,14 +207,26 @@ let link = my_profile['image']
 
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView 
+          refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }
+        >
       <Text h1>
       {my_profile["description"]}
         </Text>
         </ScrollView>
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
           <View>
               {reviews.map((item) => 
               <ReviewPost post={item} key={item._id} setRequestData={setRequestData}></ReviewPost>
