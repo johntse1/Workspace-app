@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    width:'50%',
+    textAlign:'center'
   },
 });
 
@@ -143,7 +145,8 @@ function CreatePost({navigation:{goBack}}) {
 
   return (
 
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ width:'100%', justifyContent: 'center', alignItems: 'center'}}>
+      <Text></Text>
       <Text>MAKE A POST</Text>
       <TextInput
         style={styles.input}
@@ -171,7 +174,6 @@ function CreatePost({navigation:{goBack}}) {
       />
       <View>
         <Text>{USER_TAGS.toString()}</Text>
-      </View>
       {/* <SelectDropdown
         data={skills}
         onSelect={(selectedItem, index) => {
@@ -188,7 +190,7 @@ function CreatePost({navigation:{goBack}}) {
           return item
         }}
       /> */}
-
+      </View>
       <DropDownPicker
         multiple={true}
         open={openSkills}
@@ -200,15 +202,18 @@ function CreatePost({navigation:{goBack}}) {
         onChangeValue={(value) => {
           console.log(value);
         }}
+        style={{maxWidth:250,alignSelf:'center'}}
       />
-      <Button title="Upload images" onPress={pickImage} />
 
+      <Text></Text>
+
+      <Button title="Upload images" onPress={pickImage} />
+      
 
       <Toast />
-
+      <Text></Text>
       <View>
-        <Button color='black' title='Create Post' onPress={setJobs} />
-        <Button onPress={()=>goBack()} title="go back"></Button>
+        <Button color='black' title='Create Post' onPress={setJobs} size="md"/>
       </View>
     </View>
   );

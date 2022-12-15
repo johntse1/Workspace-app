@@ -68,7 +68,7 @@ function MyJobs(props){
               history.goBack()
           }).catch(function (error) {
               //console.log(error.response)
-              props.displayToast('Rating must be a number')
+              props.displayToast('BAD REVIEW')
               //console.log('not a number')
               //Toast.show({type:'error',text1:'test'})
               //alert('must be a number')
