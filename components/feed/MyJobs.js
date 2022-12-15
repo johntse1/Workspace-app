@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React,{useState} from 'react';
-import Button from 'react-native';
+import { Button } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Text,View, Modal,Pressable} from 'react-native';
 import { Alert, StyleSheet } from "react-native";
 import { TextInput } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 
 
 function MyJobs(props){
@@ -47,30 +48,47 @@ function MyJobs(props){
       const setReview = async() => {
         let token = JSON.parse(await AsyncStorage.getItem("JWT_TOKEN"))
         console.log(props.post._id)
-        axios.post(url + props.post._id,
-        {
-            title: REVIEW_TITLE,
-            text: REVIEW_DESCRIPTION,
-            rating: rate
-        }, { headers: { "Authorization": `Bearer ${token}` } })
-        .then(function (response) {
-            console.log(response)
-            history.goBack()
-        }).catch(function (error) {
-            console.log(error.response)
-        })
+        if(rate > 5){
+          props.displayToast('Rating must be 1-5')
+          console.log(props)
+        }
+        else if(rate < 0){
+          props.displayToast('Rating must be 1-5')
+          console.log('too low')
+        }
+        else{
+          axios.post(url + props.post._id,
+          {
+              title: REVIEW_TITLE,
+              text: REVIEW_DESCRIPTION,
+              rating: rate
+          }, { headers: { "Authorization": `Bearer ${token}` } })
+          .then(function (response) {
+              console.log(response)
+              history.goBack()
+          }).catch(function (error) {
+              //console.log(error.response)
+              props.displayToast('Rating must be a number')
+              //console.log('not a number')
+              //Toast.show({type:'error',text1:'test'})
+              //alert('must be a number')
+          })
+        }
       }
     //let contBool = localStorage.getItem('contractor')
 
       //complete jobs for contractor
       if(props.post.status == 'Complete')
         return(
-          <View key={props.post._id}>
+          
+          <View key={props.post._id} style={{justifyContent:'center',alignItems:'center'}}>
+            
+            <Text></Text>
             <Text>{props.post.title}</Text>
             <Text>{props.post.username}</Text>
             <Text>{props.post.text}</Text>
-            <Text>{props.post.price}</Text>
-            <Text>{props.post.status}</Text>
+            <Text>${props.post.price}</Text>
+            
             <Modal
         animationType="slide"
         transparent={true}
@@ -84,7 +102,7 @@ function MyJobs(props){
           <Pressable
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text>Close{"\n"}</Text>
+              <Button onPress={() => setModalVisible(!modalVisible)} title='Close' size='sm' color='gray'></Button>
             </Pressable>
             <Text>Review for "{props.post.title}"{"\n"}</Text>
             <TextInput 
@@ -104,7 +122,7 @@ function MyJobs(props){
             <Pressable
               onPress={() => setReview() + setModalVisible(!modalVisible)}
             >
-              <Text>{"\n"}Submit</Text>
+              <Button title='Submit' onPress={() => setReview() + setModalVisible(!modalVisible)} size='sm' color='gray'></Button>
             </Pressable>
           </View>
         </View>
@@ -112,32 +130,43 @@ function MyJobs(props){
       <Pressable
         onPress={() => setModalVisible(true)}
       >
-        <Text>Make Review?{"\n"}</Text>
+        <Button title='Make a review' onPress={()=>setModalVisible(true)} size='sm' color='gray'></Button>
       </Pressable>
           </View>
           )
       //jobs that were accepted and in progress
       else if(props.post.status == 'in progress')
         return(
-          <View key={props.post._id}>
-          <Text>{props.post.title}</Text>
-          <Text>{props.post.user}</Text>
-          <Text>{props.post.text}</Text>
-          <Text>${props.post.price}</Text>
-          <Text>{props.post.status}</Text>
-          <Text onPress={completeJob}>Mark as complete{"\n"}</Text>
+          <View key={props.post._id} style={{justifyContent:'center',alignItems:'center'}}>
+            
+            <Text></Text>
+            <Text>{props.post.title}</Text>
+            <Text>{props.post.username}</Text>
+            <Text>{props.post.text}</Text>
+            <Text>${props.post.price}</Text>
+            <Text>{props.post.status}</Text>
+            <View style={{width:150}}>
+              <Button title='Mark as complete' color='gray' size='sm' onPress={completeJob}></Button>
+            </View>
+            <Text ></Text>
           </View>
+          
           )
       else
       {
         return(
-        <View key={props.post._id}>
+        <View key={props.post._id} style={{justifyContent:'center',alignItems:'center'}}>
+            
+            <Text></Text>
             <Text>{props.post.title}</Text>
-            <Text>{props.post.user}</Text>
+            <Text>{props.post.username}</Text>
             <Text>{props.post.text}</Text>
             <Text>{props.post.price}</Text>
             <Text>{props.post.status}</Text>
-            <Text onPress={removeJob}>Remove Job{"\n"}</Text>
+            <View style={{width:150}}>
+              <Button title='Remove Job' color='gray' size='sm' onPress={removeJob}></Button>
+            </View>
+            <Text></Text>
         </View>
         )
       }

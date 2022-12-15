@@ -28,7 +28,7 @@ function Post(props){
         }
         else{
                 //<View> className='images'>{props.post.images.map(image => <img src={image} className='postImg'/>)}</View>
-                return <View>{props.post.images.map(image => <Image source = {{uri: image}} style = {{ width: 100, height: 100 }} />)}</View>
+                return <View>{props.post.images.map(image => <Image source = {{uri: image}} style = {{ width: 100, height: 100 }} key={image}/>)}</View>
 
         }
     }
@@ -45,7 +45,6 @@ function Post(props){
             color='black'
             onPress={acceptJob}></Button>
             <Text>{"\n"}</Text>
-
         </View>
 
     );

@@ -38,7 +38,7 @@ function Login({ navigation }) {
           //setJWT_TOKEN(JSON.stringify(response.data.token))
           AsyncStorage.setItem('JWT_TOKEN', JSON.stringify(response.data.token))
           //alert('done')
-          const jsonValue = await AsyncStorage.getItem('JWT_TOKEN')
+          //const jsonValue = await AsyncStorage.getItem('JWT_TOKEN')
           //alert(jsonValue != null ? JSON.parse(jsonValue) : null)
           AsyncStorage.setItem('contractor', JSON.stringify(response.data.contractor))
           console.log('Are you a contractor? '+ await AsyncStorage.getItem('contractor'))

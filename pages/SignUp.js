@@ -184,7 +184,6 @@ function SignUp({ navigation }) {
           console.log(value);
         }}
       />
-        <Toast />
 
       <Button title="Upload a profile picture" onPress={pickImage} />
       <Button color='black' title='Register' onPress={registerUser} />

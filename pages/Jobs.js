@@ -10,8 +10,8 @@ import { API_BASE_URL, API_GET_ME } from '../API_ENDPOINTS'
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyJobs from '../components/feed/MyJobs.js'
-import { ScrollView } from 'react-native-gesture-handler';
-
+import { ScrollView, RefreshControl } from 'react-native-gesture-handler';
+import Toast from 'react-native-toast-message';
 
 const tests = async (items) =>{
   console.log('hello')
@@ -37,7 +37,9 @@ function Jobs() {
   const [previous_jobs, setPrevious_Jobs] = useState([])
   const [incomplete_jobs, setIncomplete_Jobs] = useState([])
   const [isCont, setIsCont] = useState([])
-
+  const displayToast = (message) => {
+    Toast.show({type:'error',text1:message})
+  }
 
   const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -107,7 +109,6 @@ function Jobs() {
   if(isCont == 1)
     return (
       <>
-      <Button onPress={onRefresh}>Refresh</Button>
     <Tab
       value={index}
       onChange={(e) => setIndex(e)}
@@ -129,32 +130,42 @@ function Jobs() {
 
     <TabView value={index} onChange={setIndex} animationType="spring">
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
       <View>
       {active_jobs.map((jobs) => 
-        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData} displayToast={displayToast}></MyJobs>
       )}
         </View>
       </ScrollView>
 
       </TabView.Item>
       <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-      <ScrollView>
+      <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
       <View>
       {previous_jobs.map((jobs) => 
-        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData} displayToast={displayToast}></MyJobs>
       )}
         </View>
         </ScrollView>
       </TabView.Item>
     </TabView>
+    <Toast />
   </>
     );
     else
     {
       return (
         <>
-        <Button onPress={onRefresh}>Refresh</Button>
       <Tab
         value={index}
         onChange={(e) => setIndex(e)}
@@ -181,20 +192,30 @@ function Jobs() {
   
       <TabView value={index} onChange={setIndex} animationType="spring">
         <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
         <View>
         {incomplete_jobs.map((jobs) => 
-        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData} displayToast={displayToast}></MyJobs>
       )}
           </View>
         </ScrollView>
   
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
         <View>
         {active_jobs.map((jobs) => 
-          <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+          <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData} displayToast={displayToast}></MyJobs>
         )}
           </View>
           </ScrollView>
@@ -203,16 +224,22 @@ function Jobs() {
         </TabView.Item>
   
         <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl
+              refreshing = {refreshing}
+              onRefresh={onRefresh}
+           />
+          }>
         <View>
         {previous_jobs.map((jobs) => 
-        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData}></MyJobs>
+        <MyJobs post={jobs} key={jobs._id} setRequestData={setRequestData} displayToast={displayToast}></MyJobs>
       )}
           </View>
           </ScrollView>
   
         </TabView.Item>
       </TabView>
+      <Toast />
     </>
       );
     }

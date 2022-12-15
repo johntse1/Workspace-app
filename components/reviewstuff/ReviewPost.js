@@ -10,9 +10,9 @@ function ReviewPost(props){
 
     return(
         <View key={props.post._id}>
-            <Text>{props.post.reviewer}</Text>
-            <Text>{props.post.title}</Text>
-            <Text>{props.post.rating}/5</Text>
+            <Text style={{fontWeight:'bold',fontSize:25}}>{props.post.username}</Text>
+            <Text style ={{fontWeight:'bold',fontSize:15}}>{props.post.title}</Text>
+            <Text style={{fontWeight:'bold',fontSize:15}}>{props.post.rating}/5</Text>
             <Text>{props.post.text}</Text>
             <Text>{"\n"}</Text>
         </View>

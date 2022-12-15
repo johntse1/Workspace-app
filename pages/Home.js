@@ -101,7 +101,7 @@ function NoPost({ navigation })
           <Text style={{paddingTop:30,paddingBottom:20}}>LIST OF POSTS</Text>
             <View>
               {currItems.map((item) => 
-              <Posts post={item} key={item._id} setRequestData={setRequestData}></Posts>
+              <Posts post={item} key={item._id} setRequestData={setRequestData} onRefresh={onRefresh}></Posts>
               )}
             </View>
         </View>
